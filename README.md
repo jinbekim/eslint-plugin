@@ -12,7 +12,6 @@
 
 을 통해 반환되는 [HTMLCollection](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection)은 `Iterable` 하지 않은 유사배열객체이다. 때문에 `forEach`같은 메소드가 제공되지 않는다. 하지만 [core-js](https://github.com/zloirock/core-js?tab=readme-ov-file#iterable-dom-collections)에서는 해당 폴리필을 제공해 주고 있다.
 
-하지만
 >An HTMLCollection in the HTML DOM is live; it is automatically updated when the underlying document is changed. For this reason it is a good idea to make a copy (e.g., using Array.from) to iterate over if adding, moving, or removing nodes.
 
 MDN에 설명에 따르면 `HTMLCollection`의 경우 `document`가 변경될때마다 자동으로 변경되기 때문에 copy를 만들어서 사용하는 것이 올바른 사용방법이다.
