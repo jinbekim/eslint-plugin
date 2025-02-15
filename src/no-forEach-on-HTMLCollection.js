@@ -37,7 +37,9 @@ module.exports = {
         if (
           objectNode.type === 'CallExpression' &&
           objectNode.callee.type === 'MemberExpression' &&
-          htmlCollectionsGetters.includes(objectNode.callee.property.name)
+          htmlCollectionsGetters.includes(objectNode.callee.property.name) &&
+          callee.property.type === 'Identifier' &&
+          callee.property.name === 'forEach'
         ) {
           context.report({ node, messageId: 'avoidForEachOnHTMLCollection' });
         }
