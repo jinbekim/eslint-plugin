@@ -1,15 +1,23 @@
 {
-  "name": "eslint-rule",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "eslint-plugin-no-for-each-on-html-collection",
+  "description": "ESLint plugin to disallow using forEach on HTMLCollection",
+  "version": "0.0.1",
+  "main": "/src/index.js",
   "scripts": {
     "lint": "eslint ./example/**",
     "test": "node ./src/__test__/no-forEach-on-HTMLCollection.test.js"
   },
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
+  "license": "MIT",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin"
+  ],
+  "devDependencies": {
+    "eslint": "^8.57.1"
+  },
+  "peerDependencies": {
     "eslint": "^8.57.1"
   }
 }

@@ -1,6 +1,6 @@
 // eslint.config.js
 'use strict';
-const eslintPluginExample = require('./src/eslint-plugins');
+const eslintPluginExample = require('./src');
 
 module.exports = [
   {
