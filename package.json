@@ -5,7 +5,8 @@
   "main": "/src/index.js",
   "scripts": {
     "lint": "eslint ./example/**",
-    "test": "node ./src/__test__/no-forEach-on-HTMLCollection.test.js"
+    "test": "node ./src/__test__/no-forEach-on-HTMLCollection.test.js",
+    "script": "node ./scripts/index.js ./example/"
   },
   "author": "",
   "license": "MIT",
@@ -15,7 +16,9 @@
     "eslint-plugin"
   ],
   "devDependencies": {
-    "eslint": "^8.57.1"
+    "eslint": "^8.57.1",
+    "espree": "^10.3.0",
+    "estraverse": "^5.3.0"
   },
   "peerDependencies": {
     "eslint": "^8.57.1"

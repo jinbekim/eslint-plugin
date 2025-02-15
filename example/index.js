@@ -3,7 +3,7 @@ const lists2 = document.getElementsByTagNameNS('example');
 const lists3 = document.getElementsByName('example');
 const list4 = document.getElementsByTagName('example');
 
-document.getElementsByClassName('example').forEach(console.log); // error
+document.getElementsByClassName('example')?.forEach(console.log); // error
 
 {
   lists2.forEach(console.log); // error
