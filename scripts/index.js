@@ -5,25 +5,12 @@ const estraverse = require('estraverse');
 
 const targetDir = process.argv[2] || 'src'; // 검사할 대상 디렉토리
 
-function extractScriptFromVue(filePath) {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const parsed = parseVue(content);
-
-  if (parsed.descriptor.script) {
-    return parsed.descriptor.script.content; // <script> 내용 추출
-  }
-  if (parsed.descriptor.scriptSetup) {
-    return parsed.descriptor.scriptSetup.content; // <script setup> 내용 추출
-  }
-  return null;
-}
-
 function checkForEachOnHTMLCollection(filePath, code) {
   try {
     // Parse the code into an AST
     const ast = espree.parse(code, {
       ecmaVersion: 'latest',
-      sourceType: 'script',
+      sourceType: 'module',
       loc: true,
     });
     const htmlCollections = new Set();
@@ -91,11 +78,6 @@ function scanDirectory(dir) {
     } else if (filePath.endsWith('.js') || filePath.endsWith('.ts')) {
       const code = fs.readFileSync(filePath, 'utf-8');
       checkForEachOnHTMLCollection(filePath, code);
-    } else if (filePath.endsWith('.vue')) {
-      const scriptCode = extractScriptFromVue(filePath);
-      if (scriptCode) {
-        checkForEachOnHTMLCollection(filePath, scriptCode);
-      }
     }
   });
 }
