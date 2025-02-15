@@ -11,7 +11,7 @@ module.exports = [
     },
     plugins: { example: eslintPluginExample },
     rules: {
-      'example/no-forEach': 'error',
+      'example/no-forEach-on-HTMLCollection': 'error',
     },
   },
 ];

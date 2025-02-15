@@ -1,8 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { parse } = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const { parse: parseVue } = require('@vue/compiler-sfc');
 const espree = require('espree');
 const estraverse = require('estraverse');
 
@@ -103,6 +100,7 @@ function scanDirectory(dir) {
   });
 }
 // 검사 실행
+console.time('✅ Scan complete.');
 console.log(`🔍 Scanning directory: ${targetDir}`);
 scanDirectory(targetDir);
-console.log('✅ Scan complete.');
+console.timeEnd('✅ Scan complete.');

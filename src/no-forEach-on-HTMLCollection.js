@@ -7,6 +7,7 @@ module.exports = {
       category: 'Possible Errors',
       recommended: true,
     },
+    fixable: 'code',
     messages: {
       avoidForEachOnHTMLCollection:
         'HTMLCollection does not support forEach. Convert it to an array using Array.from() or spread operator.',
@@ -20,15 +21,22 @@ module.exports = {
       'getElementsByClassName',
       'getElementsByTagNameNS',
     ];
-    function findVariableInScope(scope, name) {
-      while (scope) {
-        const variable = scope.set.get(name);
-        if (variable) return variable;
-        scope = scope.upper; // 상위 스코프로 이동
-      }
-      return null;
-    }
+
+    const htmlCollections = new Set();
+
     return {
+      VariableDeclarator(node) {
+        if (
+          node.init &&
+          node.init.type === 'CallExpression' &&
+          node.init.callee.type === 'MemberExpression' &&
+          node.init.callee.object.name === 'document' &&
+          htmlCollectionsGetters.includes(node.init.callee.property.name)
+        ) {
+          htmlCollections.add(node.id.name);
+        }
+      },
+
       CallExpression(node) {
         const { callee } = node;
         const objectNode = callee.object;
@@ -41,30 +49,33 @@ module.exports = {
           callee.property.type === 'Identifier' &&
           callee.property.name === 'forEach'
         ) {
-          context.report({ node, messageId: 'avoidForEachOnHTMLCollection' });
+          context.report({
+            node,
+            messageId: 'avoidForEachOnHTMLCollection',
+            data: { name: objectNode.callee.property.name },
+            fix(fixer) {
+              return fixer.replaceText(
+                node,
+                `Array.from(${sourceCode.getText(objectNode)}).forEach`
+              );
+            },
+          });
         }
 
         if (
           callee.type === 'MemberExpression' &&
           callee.property.type === 'Identifier' &&
-          callee.property.name === 'forEach'
+          callee.property.name === 'forEach' &&
+          htmlCollections.has(objectName)
         ) {
-          if (!objectName) return;
-          const scope = sourceCode.getScope(objectNode);
-          const variable = findVariableInScope(scope, objectName);
-
-          if (variable) {
-            variable.defs.forEach((def) => {
-              if (
-                def.node.init &&
-                def.node.init.type === 'CallExpression' &&
-                def.node.init.callee.type === 'MemberExpression' &&
-                htmlCollectionsGetters.includes(def.node.init.callee.property.name)
-              ) {
-                context.report({ node, messageId: 'avoidForEachOnHTMLCollection' });
-              }
-            });
-          }
+          context.report({
+            node,
+            messageId: 'avoidForEachOnHTMLCollection',
+            data: { name: objectName },
+            fix(fixer) {
+              return fixer.replaceText(node, `Array.from(${objectName}).forEach`);
+            },
+          });
         }
       },
     };
